@@ -42,9 +42,11 @@ void app_main(void)
 	printf("entering light sleep\n");
 	fflush(stdout);
 	renard_phy_s2lp_hal_interrupt_gpio(true);
-	renard_phy_s2lp_hal_interrupt_timeout(5000);
-	renard_phy_s2lp_hal_interrupt_wait();
-	printf("woke up\n");
+	renard_phy_s2lp_hal_interrupt_timeout(10000);
+
+	while (renard_phy_s2lp_hal_interrupt_wait()) {
+		printf("woke up\n");
+	}
 
 	/* Reboot countdown */
 	for (int i = 3; i >= 0; i--) {

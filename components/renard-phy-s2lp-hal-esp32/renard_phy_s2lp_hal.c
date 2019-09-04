@@ -28,19 +28,22 @@ void renard_phy_s2lp_hal_interrupt_timeout(uint32_t milliseconds)
 
 void renard_phy_s2lp_hal_interrupt_gpio(bool risingTrigger)
 {
-	esp32renard_gpio_interrupt(risingTrigger);
+	esp32renard_gpio_interrupt_enable(risingTrigger);
 }
 
 void renard_phy_s2lp_hal_interrupt_clear(void)
 {
-	// TODO: ??? when should the interrupt *not* be cleared ???
-	//stm32renard_timer_stop();
-	//stm32renard_gpio_interrupt_enable(false);
+	esp32renard_timer_stop();
+	esp32renard_gpio_interrupt_disable();
 }
 
 int renard_phy_s2lp_hal_interrupt_wait(void)
 {
+	esp32renard_timer_continue();
+	esp32renard_gpio_interrupt_continue();
+
 	esp_light_sleep_start();
+
 	return esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_GPIO;
 }
 

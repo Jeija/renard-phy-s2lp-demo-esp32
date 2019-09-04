@@ -13,4 +13,3 @@ void esp32renard_shutdown_set(bool shutdown)
 {
 	gpio_set_level(ESP32RENARD_SHUTDOWN_IO, shutdown);
 }
-
