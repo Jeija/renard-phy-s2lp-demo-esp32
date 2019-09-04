@@ -1,0 +1,56 @@
+menu "Renard HAL Config"
+
+	config RENARD_S2LP_MISO_GPIO
+		int "S2LP MISO GPIO"
+		range 0 34
+		default 19
+		help
+			GPIO number (IOxx) of MISO pin of SPI bus connected to S2-LP.
+
+			Default value is IOMUX pin.
+
+	config RENARD_S2LP_MOSI_GPIO
+		int "S2LP MOSI GPIO"
+		range 0 34
+		default 23
+		help
+			GPIO number (IOxx) of MOSI pin of SPI bus connected to S2-LP.
+
+			Default value is IOMUX pin.
+
+	config RENARD_S2LP_SCLK_GPIO
+		int "S2LP SCLK GPIO"
+		range 0 34
+		default 18
+		help
+			GPIO number (IOxx) of SCLK pin of SPI bus connected to S2-LP.
+
+			Default value is IOMUX pin.
+
+	config RENARD_S2LP_CS_GPIO
+		int "S2LP CS GPIO"
+		range 0 34
+		default 5
+		help
+			GPIO number (IOxx) of CS pin of SPI bus connected to S2-LP.
+
+			Default value is IOMUX pin.
+
+	config RENARD_S2LP_SDN_GPIO
+		int "S2LP SDN GPIO"
+		range 0 34
+		default 16
+		help
+			GPIO number (IOxx) of pin that is connected to S2-LP's "SDN" (shutdown) pin. Used for resetting S2-LP.
+
+	config RENARD_S2LP_INT_GPIO
+		int "S2LP INT GPIO"
+		range 0 34
+		default 4
+		help
+			GPIO number (IOxx) of pin that is connected to S2-LP's GPIO3 pin.
+
+			S2-LP's GPIO3 output is configured to generate interrupts for the ESP32 (e.g. while transmitting
+			when more data is needed or when a downlink is received).
+
+endmenu
