@@ -1,3 +1,4 @@
 sdkconfig.old
 build
+components/renard-phy-s2lp-container/renard-phy-s2lp
 *~

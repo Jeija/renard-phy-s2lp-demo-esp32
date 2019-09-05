@@ -12,7 +12,10 @@ void esp32renard_gpio_interrupt_enable(bool rising)
 
 void esp32renard_gpio_interrupt_disable(void)
 {
-	gpio_interrupt_enable = false;
+	if (gpio_interrupt_enable) {
+		gpio_interrupt_enable = false;
+		esp_sleep_disable_wakeup_source(ESP_SLEEP_WAKEUP_GPIO);
+	}
 }
 
 void esp32renard_gpio_interrupt_continue(void)

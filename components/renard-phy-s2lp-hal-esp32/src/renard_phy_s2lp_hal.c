@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "esp_sleep.h"
 
 #include "esp32renard_shutdown.h"
@@ -44,6 +45,9 @@ int renard_phy_s2lp_hal_interrupt_wait(void)
 
 	esp_light_sleep_start();
 
-	return esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_GPIO;
+	int cause = esp_sleep_get_wakeup_cause();
+	if (cause == ESP_SLEEP_WAKEUP_TIMER)
+		esp32renard_timer_stop();
+	return cause == ESP_SLEEP_WAKEUP_GPIO ? true : false;
 }
 
