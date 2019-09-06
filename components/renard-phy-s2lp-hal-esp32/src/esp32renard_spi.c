@@ -29,11 +29,6 @@ void esp32renard_spi_init(void)
 
 void esp32renard_spi_raw(uint8_t length, uint8_t *in, uint8_t *out)
 {
-	/*printf("SPI TX: ");
-	for (uint8_t i = 0; i < length; i++)
-		printf("%02x", in[i]);
-	printf(" - length %d\n", length);*/
-
 	spi_transaction_t t;
 	memset(&t, 0, sizeof(t));
 	t.length = (size_t)length * 8;

@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "esp_sleep.h"
 
 #include "esp32renard_shutdown.h"

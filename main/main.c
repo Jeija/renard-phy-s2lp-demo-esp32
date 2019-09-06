@@ -22,10 +22,17 @@ int renard_phy_s2lp_hal_interrupt_wait(void);
 
 void app_main(void)
 {
-	renard_phy_s2lp_init();
-	renard_phy_s2lp_protocol_init(12345, UL_DATARATE_100BPS);
+	printf("[renard-phy-s2lp-demo-esp32] Initializing S2-LP...\r\n");
 
-	printf("[renard-phy-s2lp-demo-esp32] Initialization complete!\r\n");
+	if (renard_phy_s2lp_init()) {
+		printf("[renard-phy-s2lp-demo-esp32] Initialization OK, S2-LP detected!\r\n");
+	} else {
+		printf("[renard-phy-s2lp-demo-esp32] Initialization FAIL - S2-LP not responding!\r\n");
+		vTaskDelay(1000 / portTICK_PERIOD_MS);
+		esp_restart();
+	}
+	renard_phy_s2lp_protocol_init(1234, UL_DATARATE_100BPS);
+	vTaskDelay(100 / portTICK_PERIOD_MS);
 
 	/* Pycom SiPy credentials */
 	uint8_t key[] = {0x47, 0x9e, 0x44, 0x80, 0xfd, 0x75, 0x96, 0xd4, 0x5b, 0x01, 0x22, 0xfd, 0x28, 0x2d, 0xb3, 0xcf};
@@ -38,6 +45,7 @@ void app_main(void)
 	memcpy(common.key, key, 16);
 
 	printf("[renard-phy-s2lp-demo-esp32] Starting message transfer!\r\n");
+	vTaskDelay(100 / portTICK_PERIOD_MS);
 
 	/* Prepare payload */
 	sfx_ul_plain uplink;
@@ -66,33 +74,6 @@ void app_main(void)
 	} else {
 		printf("[renard-phy-s2lp-demo-esp32] Unknown protocol error occurred\r\n");
 	}
-
-
-	/*renard_phy_s2lp_hal_init();
-
-	renard_phy_s2lp_hal_shutdown(true);
-	vTaskDelay(20 / portTICK_PERIOD_MS);
-	renard_phy_s2lp_hal_shutdown(false);
-	vTaskDelay(20 / portTICK_PERIOD_MS);
-
-	uint8_t txdata[] = {0x01, 0xf0, 0x00, 0x00};
-	uint8_t rxdata[sizeof(txdata)];
-	renard_phy_s2lp_hal_spi(4, txdata, rxdata);
-
-	printf("RX Data: ");
-	for (uint8_t i = 0; i < sizeof(rxdata); i++)
-		printf("%02x", rxdata[i]);
-	printf("\n");*/
-
-	/* wait for gpio interrupt */
-	/*printf("entering light sleep\n");
-	fflush(stdout);
-	renard_phy_s2lp_hal_interrupt_gpio(true);
-	renard_phy_s2lp_hal_interrupt_timeout(10000);
-
-	while (renard_phy_s2lp_hal_interrupt_wait()) {
-		printf("woke up\n");
-	}*/
 
 	/* Reboot countdown */
 	for (int i = 3; i >= 0; i--) {
