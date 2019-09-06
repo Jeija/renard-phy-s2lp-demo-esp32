@@ -1,0 +1,3 @@
+[submodule "components/renard-phy-s2lp-container/renard-phy-s2lp"]
+	path = components/renard-phy-s2lp-container/renard-phy-s2lp
+	url = https://github.com/Jeija/renard-phy-s2lp
