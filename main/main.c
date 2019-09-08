@@ -12,9 +12,14 @@
 #include "renard_phy_s2lp.h"
 
 /* ***PUT YOUR SIGFOX CREDENTIALS HERE*** */
-uint8_t key[] = {0x47, 0x9e, 0x44, 0x80, 0xfd, 0x75, 0x96, 0xd4, 0x5b, 0x01, 0x22, 0xfd, 0x28, 0x2d, 0xb3, 0xcf};
-uint32_t devid = 0x004d33db;
-uint8_t payload[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x12, 0x34, 0x56};
+uint8_t sigfox_key[] = {0x47, 0x9e, 0x44, 0x80, 0xfd, 0x75, 0x96, 0xd4, 0x5b, 0x01, 0x22, 0xfd, 0x28, 0x2d, 0xb3, 0xcf};
+uint32_t sigfox_devid = 0x004d33db;
+uint8_t sigfox_payload[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x12, 0x34, 0x56};
+
+/* *** Test credentials for testing with Sigfox RSA (Radio Signal Analyzer) *** */
+/*uint8_t sigfox_key[] = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF, 0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF};
+uint32_t sigfox_devid = 0xfedcba98;
+uint8_t sigfox_payload[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00};*/
 
 static uint16_t next_seqnum(void)
 {
@@ -57,12 +62,12 @@ void app_main(void)
 	printf("[renard-phy-s2lp-demo-esp32] Starting message transfer!\r\n");
 	sfx_commoninfo common;
 	common.seqnum = next_seqnum();
-	common.devid = devid;
-	memcpy(common.key, key, 16);
+	common.devid = sigfox_devid;
+	memcpy(common.key, sigfox_key, 16);
 
 	sfx_ul_plain uplink;
-	memcpy(uplink.payload, payload, sizeof(payload));
-	uplink.payloadlen = sizeof(payload);
+	memcpy(uplink.payload, sigfox_payload, sizeof(sigfox_payload));
+	uplink.payloadlen = sizeof(sigfox_payload);
 	uplink.request_downlink = true;
 	uplink.singlebit = false;
 	uplink.replicas = true;
@@ -85,7 +90,7 @@ void app_main(void)
 			printf("[renard-phy-s2lp-demo-esp32] Downlink MAC OK  : %d\r\n", downlink.mac_ok);
 			printf("[renard-phy-s2lp-demo-esp32] Downlink FEC Use : %d\r\n", downlink.fec_corrected);
 		} else {
-			printf("[renard-phy-s2lp-demo-esp32] Uplink transmitted, no downlink requested.");
+			printf("[renard-phy-s2lp-demo-esp32] Uplink transmitted, no downlink requested.\r\n");
 		}
 	} else if (err == PROTOCOL_ERROR_TIMEOUT) {
 		printf("[renard-phy-s2lp-demo-esp32] Timeout while waiting for downlink\r\n");
@@ -95,10 +100,10 @@ void app_main(void)
 
 	/* Reboot countdown */
 	for (int i = 3; i >= 0; i--) {
-		printf("Restarting in %d seconds...\n", i);
+		printf("Restarting in %d seconds...\r\n", i);
 		vTaskDelay(1000 / portTICK_PERIOD_MS);
 	}
-	printf("Restarting now.\n");
+	printf("Restarting now.\r\n");
 	fflush(stdout);
 	esp_restart();
 }
