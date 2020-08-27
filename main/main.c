@@ -54,7 +54,7 @@ void app_main(void)
 		vTaskDelay(1000 / portTICK_PERIOD_MS);
 		esp_restart();
 	}
-	renard_phy_s2lp_protocol_init(esp_random(), UL_DATARATE_100BPS);
+	renard_phy_s2lp_protocol_init(esp_random());
 
 	vTaskDelay(100 / portTICK_PERIOD_MS);
 
@@ -75,7 +75,8 @@ void app_main(void)
 	/* Actual protocol operation */
 	sfx_dl_plain downlink;
 	int16_t downlink_rssi;
-	int err = renard_phy_s2lp_protocol_transfer(&common, &uplink, &downlink, &downlink_rssi);
+	int err = renard_phy_s2lp_protocol_transfer(&common, &uplink, &downlink, PROFILE_RC1, UL_DATARATE_100BPS,
+			&downlink_rssi);
 
 	/* Log result */
 	if (err == PROTOCOL_ERROR_NONE) {
