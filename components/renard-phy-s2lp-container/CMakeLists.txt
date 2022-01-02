@@ -5,6 +5,8 @@ idf_component_register(
 file(GLOB renard_phy_s2lp_srcs ${COMPONENT_DIR}/renard-phy-s2lp/src/*.c ${COMPONENT_DIR}/renard-phy-s2lp/src/*.h)
 file(GLOB librenard_srcs ${COMPONENT_DIR}/renard-phy-s2lp/librenard/src/*.c ${COMPONENT_DIR}/renard-phy-s2lp/librenard/src/*.h)
 
+string(APPEND CMAKE_C_FLAGS " -mlongcalls")
+
 add_custom_command(
 	OUTPUT ${COMPONENT_DIR}/renard-phy-s2lp/renard-phy-s2lp.a
 	DEPENDS ${renard_phy_s2lp_srcs} ${librenard_srcs}
